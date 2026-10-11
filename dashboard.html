@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Smart Home Security Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- HEADER -->
+    <header class="top-header">
+        <div class="brand">
+            <h2>🏠 Smart Home Security</h2>
+            <p>Intelligent Home Protection</p>
+        </div>
+
+        <div class="header-links">
+            <a href="{{ url_for('dashboard') }}">Dashboard</a>
+            <a href="{{ url_for('history') }}">Security History</a>
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </header>
+
+
+    <!-- MAIN DASHBOARD -->
+    <main class="dashboard-main">
+
+        <!-- WELCOME -->
+        <section class="welcome-section">
+            <h1>Welcome, {{ username }}! 👋</h1>
+            <p>Monitor your home security from one place.</p>
+        </section>
+
+
+        <!-- SECURITY MODE SIDEBAR -->
+        <section class="security-panel">
+
+            <h3>🛡️ Security Control</h3>
+
+            <label for="securityMode">Security Mode</label>
+
+            <select id="securityMode" onchange="changeMode()">
+                <option value="disarmed">Disarmed</option>
+                <option value="armed">Armed</option>
+                <option value="night">Night Mode</option>
+                <option value="away">Away Mode</option>
+            </select>
+
+            <p id="sidebarStatus">🟢 Secure</p>
+
+            <p>
+                Last Check:
+                <span id="lastCheck">Waiting...</span>
+            </p>
+
+            <p>
+                Current Time:
+                <span id="currentTime">--:--:--</span>
+            </p>
+
+        </section>
+
+
+        <!-- SECURITY STATUS -->
+        <section class="security-banner">
+
+            <h2 id="statusText">🟢 System Disarmed</h2>
+
+            <p id="securityDescription">
+                Security monitoring is disabled.
+            </p>
+
+            <p>
+                System Status:
+                <strong id="indicatorText">SECURE</strong>
+            </p>
+
+        </section>
+
+
+        <!-- STATISTICS -->
+        <section class="statistics-section">
+
+            <h2>Dashboard Statistics</h2>
+
+            <div class="stats-grid">
+
+                <!-- ROOMS -->
+                <div class="stat-card">
+                    <div class="stat-icon">🏠</div>
+
+                    <div>
+                        <p>Rooms</p>
+                        <h2>3</h2>
+                    </div>
+                </div>
+
+
+                <!-- SENSORS -->
+                <div class="stat-card">
+                    <div class="stat-icon">📡</div>
+
+                    <div>
+                        <p>Sensors</p>
+                        <h2>3</h2>
+                    </div>
+                </div>
+
+
+                <!-- ALERTS -->
+                <div class="stat-card">
+                    <div class="stat-icon">🚨</div>
+
+                    <div>
+                        <p>Active Alerts</p>
+                        <h2 id="alertCount">0</h2>
+                    </div>
+                </div>
+
+
+                <!-- PROTECTION -->
+                <div class="stat-card">
+                    <div class="stat-icon">🔐</div>
+
+                    <div>
+                        <p>Protection</p>
+                        <h2 id="protectionStatus">OFF</h2>
+                    </div>
+                </div>
+
+
+                <!-- SYSTEM HEALTH -->
+                <div class="stat-card">
+                    <div class="stat-icon">💚</div>
+
+                    <div>
+                        <p>System Health</p>
+                        <h2 id="systemHealth">100%</h2>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- SENSORS -->
+        <section class="sensors-section">
+
+            <h2>Sensor Monitoring</h2>
+
+            <div class="sensor-grid">
+
+                <!-- DOOR SENSOR -->
+                <div class="sensor-card" id="doorCard">
+
+                    <div class="room-icon">🚪</div>
+
+                    <h3>Door Sensor</h3>
+
+                    <p>Front Door</p>
+
+                    <h4 id="doorStatus">🟢 CLOSED</h4>
+
+                    <span class="sensor-online">● Online</span>
+
+                    <div class="sensor-buttons">
+
+                        <button onclick="toggleDoor()">
+                            Open / Close Door
+                        </button>
+
+                        <button onclick="toggleDoorSensor()">
+                            Sensor Online / Offline
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WINDOW SENSOR -->
+                <div class="sensor-card" id="windowCard">
+
+                    <div class="room-icon">🪟</div>
+
+                    <h3>Window Sensor</h3>
+
+                    <p>Living Room</p>
+
+                    <h4 id="windowStatus">🟢 CLOSED</h4>
+
+                    <span class="sensor-online">● Online</span>
+
+                    <div class="sensor-buttons">
+
+                        <button onclick="toggleWindow()">
+                            Open / Close Window
+                        </button>
+
+                        <button onclick="toggleWindowSensor()">
+                            Sensor Online / Offline
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- MOTION SENSOR -->
+                <div class="sensor-card" id="motionCard">
+
+                    <div class="room-icon">🚶</div>
+
+                    <h3>Motion Sensor</h3>
+
+                    <p>Bedroom</p>
+
+                    <h4 id="motionStatus">No Motion</h4>
+
+                    <span class="sensor-online">● Online</span>
+
+                    <div class="sensor-buttons">
+
+                        <button onclick="detectMotion()">
+                            Detect Motion
+                        </button>
+
+                        <button onclick="toggleMotionSensor()">
+                            Sensor Online / Offline
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ALARM -->
+        <section class="alarm-section" id="alarmBox">
+
+            <h2>🔔 Security Alarm</h2>
+
+            <h3 id="alarmStatus">Alarm is OFF</h3>
+
+            <p id="alarmText">INACTIVE</p>
+
+            <div id="alarmLight"></div>
+
+        </section>
+
+
+        <!-- RECENT ACTIVITY -->
+        <section class="activity-section">
+
+            <div class="section-heading">
+                <h2>Recent Activity</h2>
+
+                <a href="{{ url_for('history') }}">
+                    View All History →
+                </a>
+            </div>
+
+            <div class="activity-list" id="activityList">
+
+                {% if events %}
+
+                    {% for event in events %}
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon">
+                            {% if event["level"] == "HIGH" %}
+                                🔴
+                            {% else %}
+                                🟢
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <strong>{{ event["event"] }}</strong>
+
+                            <p>
+                                {{ event["sensor"] }}
+                                • {{ event["level"] }} priority
+                            </p>
+                        </div>
+
+                        <span class="activity-time">
+                            {{ event["time"] | ist_time }}
+                        </span>
+
+                    </div>
+
+                    {% endfor %}
+
+                {% else %}
+
+                    <div class="activity-item">
+
+                        <div class="activity-icon">🟢</div>
+
+                        <div>
+                            <strong>No activity yet</strong>
+                            <p>Sensor events will appear here.</p>
+                        </div>
+
+                        <span class="activity-time">—</span>
+
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- SECURITY NOTIFICATION -->
+<div id="securityNotification"
+     class="security-notification">
+    🚨 Security Alert: Intrusion detected!
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+<script>
+    // Display the current time
+    function updateCurrentTime() {
+
+        const timeElement =
+            document.getElementById("currentTime");
+
+        if (timeElement) {
+
+            timeElement.innerText =
+                new Date().toLocaleTimeString("en-IN", {
+                    timeZone: "Asia/Kolkata"
+                });
+
+        }
+    }
+
+    updateCurrentTime();
+
+    setInterval(updateCurrentTime, 1000);
+</script>
+
+</body>
+</html>

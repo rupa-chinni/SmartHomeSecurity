@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <title>Security History</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+</head>
+
+<body>
+
+<header>
+
+    <h1>📋 Security History</h1>
+
+    <div>
+
+        <a href="/dashboard">
+            Dashboard
+        </a>
+
+        &nbsp;&nbsp;
+
+        <a href="/logout">
+            Logout
+        </a>
+
+    </div>
+
+</header>
+
+
+<main>
+
+    <h2>Security Events</h2>
+
+
+    <table border="1" cellpadding="10">
+
+        <tr>
+
+            <th>Sensor</th>
+            <th>Event</th>
+            <th>Level</th>
+            <th>Time</th>
+
+        </tr>
+
+
+        {% for event in events %}
+
+        <tr>
+
+            <td>
+                {{ event["sensor"] }}
+            </td>
+
+            <td>
+                {{ event["event"] }}
+            </td>
+
+            <td>
+                {{ event["level"] }}
+            </td>
+
+            <td>
+                {{ event["time"] | ist_time }}
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</main>
+
+</body>
+
+</html>

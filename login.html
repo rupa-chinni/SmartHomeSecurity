@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Home Security</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <h1>🏠 Smart Home Security</h1>
+
+    <p>Secure your home. Monitor everything.</p>
+
+    <form action="/login" method="POST">
+
+    <input
+        type="text"
+        name="username"
+        placeholder="Username"
+        required
+    >
+
+    <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        required
+    >
+
+    <button type="submit">Login</button>
+
+</form>
+
+    <p>
+        Don't have an account?
+        <a href="/register">Register</a>
+    </p>
+
+</div>
+
+</body>
+</html>

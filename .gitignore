@@ -1,0 +1,23 @@
+# Python cache files
+
+**pycache**/
+*.py[cod]
+
+# Virtual environments
+
+venv/
+.venv/
+
+# Secret files
+
+.env
+.env.*
+
+# Local database
+
+database.db
+*.db
+
+# Editor settings
+
+.vscode/
